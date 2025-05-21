@@ -1,29 +1,3 @@
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# import time
-
-# # Launch the browser and open the site
-# driver = webdriver.Chrome()
-# driver.get('https://www.thirdeyeadventure.com')
-# driver.maximize_window()
-# time.sleep(2)
-
-# element = driver.find_element(By.CLASS_NAME, "title-content__wrapper")
-
-
-# driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element)
-
-
-# time.sleep(5)
-
-# driver.quit()
-
-
-# from selenium import webdriver
-# from selenium.webdriver.common.by import By
-# import time
-
-
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -34,26 +8,15 @@ driver.get('https://www.thirdeyeadventure.com')
 driver.maximize_window()
 time.sleep(2)
 
-scroll_speed = 300
-max_scrolls = 50
+page_height = driver.execute_script("return document.body.scrollHeight")
+scroll_speed = 500
+scroll_iteration = int(page_height/scroll_speed)
 
-for _ in range(max_scrolls):
+for _ in range(scroll_iteration):
     try:
-        element = driver.find_element(By.CLASS_NAME, "title-content__wrpper")
-
-       
-        is_visible = driver.execute_script("""
-            const rect = arguments[0].getBoundingClientRect();
-            return (
-                rect.top >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-            );
-        """, element)
-
-        if is_visible:
-            print("Element is now visible in viewport. Stopping scroll.")
-            break
-
+        element = driver.find_element(By.CLASS_NAME, "title-content__wrapper")
+        driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element)
+        break 
     except:
         driver.execute_script(f"window.scrollBy(0, {scroll_speed});")
         time.sleep(1)
